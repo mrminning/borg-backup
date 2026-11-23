@@ -44,6 +44,10 @@ if (( $space < 400000 )); then
 fi
 
 /usr/bin/borg --lock-wait 600 with-lock "${ENV_SYNC_REPOSITORY_PATH}" \
-    /usr/bin/rclone -v sync "${ENV_SYNC_REPOSITORY_PATH}" "${ENV_SYNC_TARGET_PATH}" \
+    /usr/bin/rclone -v sync \
+    --checksum \
+    --s3-disable-checksum=false \
+    --s3-no-head=false \
+"${ENV_SYNC_REPOSITORY_PATH}" "${ENV_SYNC_TARGET_PATH}" \
     >> "${DIR}/wasabi-sync.log" 2>&1
 mail -s "Wasabisync" ${ENV_BORG_EMAIL_ADDRESS}<"${DIR}/wasabi-sync.log"
